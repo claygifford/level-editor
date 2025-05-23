@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topdown Fighting Game</title>
+    <script src="loop.js"></script>
+    <script src="game.js"></script>
+    <script src="maps.js"></script>
+    <script src="maps/map1.js"></script>
+    <script src="resources.js"></script>
+    <script src="image-loader.js"></script>
+  </head>
+
+  <body>
+    <div class="game-container">
+      <div class="game-information">
+        <div id="information">Mouse position</div>
+        <div class="game-information-buttons">
+          <button onclick="onSave()">Save</button>
+          <button onclick="onClear()">Clear</button>
+        </div>
+        <div class="game-information-section">
+          <div>Zoom</div>
+          <div>
+            <button onclick="onZoomIn()">+</button>
+            <button onclick="onZoomReset()">Reset</button>
+            <button onclick="onZoomOut()">-</button>
+          </div>
+        </div>
+        <div class="game-information-section">
+          <div>Animations</div>
+          <div>
+            <button onclick="onStartAnimate()">Start</button>
+            <button onclick="onStopAnimate()">Stop</button>
+          </div>
+        </div>
+        <div class="game-information-section">
+          <div>kevins moms house itch.io</div>
+          <a href="https://kevins-moms-house.itch.io/fantasy" target="_blank"
+            >fantasy</a
+          >
+          <a
+            href="https://kevins-moms-house.itch.io/playersprites"
+            target="_blank"
+            >playersprites</a
+          >
+        </div>
+        <div class="game-information-section">
+          <div>Active Brush</div>
+          <div id="active-brush" class="game-brushes"></div>
+          <div id="active-brush-name" class="game-brushes"></div>
+        </div>
+        <div class="game-information-section">
+          <div>Font</div>
+          <div>
+            <button onclick="onAddFont()">Add</button>
+            <button onclick="onRemoveFont()">Remove</button>
+          </div>
+        </div>
+        <div class="game-information-section">
+          <div>Maps</div>
+          <div>
+            <button onclick="onLoadMap1()">Map1</button>
+          </div>
+        </div>
+        <div class="game-information-section">
+          <div>Equip Right Hand</div>
+          <div>
+            <button onclick="onEquip('rightHand', 'sword')">Sword</button>
+          </div>
+          <div>
+            <button onclick="onEquip('rightHand', 'empty')">Empty</button>
+          </div>
+        </div>
+        <div class="game-information-section">
+          <div>Equip Left Hand</div>
+          <div>
+            <button onclick="onEquip('leftHand', 'shield')">Shield</button>
+          </div>
+          <div>
+            <button onclick="onEquip('leftHand', 'empty')">Empty</button>
+          </div>
+        </div>
+      </div>
+      <div class="game-section">
+        <div class="game-area">
+          <canvas
+            id="GameCanvas"
+            width="640"
+            height="640"
+            class="clean-canvas"
+          ></canvas>
+          <canvas
+            id="StructuresCanvas"
+            width="640"
+            height="640"
+            class="clean-canvas"
+          ></canvas>
+          <canvas
+            id="CharacterCanvas"
+            width="640"
+            height="640"
+            class="clean-canvas"
+          ></canvas>
+          <canvas
+            id="ResourcesCanvas"
+            width="640"
+            height="640"
+            class="clean-canvas"
+          ></canvas>
+          <canvas
+            id="OverlayCanvas"
+            width="640"
+            height="640"
+            class="dirty-canvas"
+          ></canvas>
+        </div>
+      </div>
+
+      <div class="game-brush">
+        <div>Brushes</div>
+        <div id="brushes" class="game-brushes">
+          <div>General</div>
+          <div id="general" class="game-brushes-general"></div>
+          <div>Path</div>
+          <div id="path" class="game-brushes-path"></div>
+          <div>Bridge Horizontal</div>
+          <div
+            id="bridge_horizontal"
+            class="game-brushes-bridge-horizontal"
+          ></div>
+          <div>Bridge Vertical</div>
+          <div id="bridge_vertical" class="game-brushes-bridge-vertical"></div>
+          <div>Fountain</div>
+          <div id="fountain" class="game-brushes-fountain"></div>
+          <div>Fences and Walls</div>
+          <div
+            id="fences_and_walls"
+            class="game-brushes-fences-and-walls"
+          ></div>
+          <div>Collections</div>
+          <div id="collections" class="game-brushes-collections"></div>
+        </div>
+      </div>
+    </div>
+    <script src="context.js"></script>
+    <script src="level-editor.js"></script>
+  </body>
+</html>

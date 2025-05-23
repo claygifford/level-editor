@@ -1,0 +1,87 @@
+canvas {
+    display: block;
+    position: absolute;
+}
+.clean-canvas {
+    /* image-rendering: pixelated; */
+}
+img {
+    /* image-rendering: pixelated; */
+}
+
+@font-face {
+    font-family: StardewValley;
+    src: url(./fonts/StardewValley.ttf);
+  }
+
+.game-area {
+    position: relative;
+    height: 642px;
+    width: 642px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px dashed gray;
+    margin: 4px;
+}
+
+.game-container {
+    display: flex;
+}
+
+.game-section {
+    display: flex;
+}
+
+.game-information {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 4px;
+    flex-basis: 200px;
+    flex-shrink: 0;
+}
+
+.game-information-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.game-information-buttons {
+    display: flex;
+    gap: 4px;
+}
+
+.game-brush {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+.game-brushes {
+    display: flex;
+    flex-direction: column;
+}
+.game-brushes-general {
+    display: grid;
+    grid-template-columns: repeat(16, 16px);
+    gap: 1px;
+}
+.game-brushes-path {
+    display: grid;
+    grid-template-columns: repeat(6, 16px);
+    gap: 1px;
+}
+.game-brushes-fences-and-walls {
+    display: flex;
+    flex-wrap: wrap;
+}
+.game-brushes-collections {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+html, body {
+    margin: 0;
+    font-family: StardewValley;
+}
+

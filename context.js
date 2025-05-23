@@ -1,0 +1,15 @@
+const gameCanvas = document.getElementById('GameCanvas');
+const gameCtx = gameCanvas.getContext('2d', { antialias: false });
+gameCtx.imageSmoothingEnabled = false;
+const structuresCanvas = document.getElementById('StructuresCanvas');
+const structuresCtx = structuresCanvas.getContext('2d', { antialias: false });
+structuresCtx.imageSmoothingEnabled = false;
+const resourcesCanvas = document.getElementById('ResourcesCanvas');
+const resourcesCtx = resourcesCanvas.getContext('2d', { antialias: false });
+resourcesCtx.imageSmoothingEnabled = false;
+const characterCanvas = document.getElementById('CharacterCanvas');
+const characterCtx = characterCanvas.getContext('2d', { antialias: false });
+characterCtx.imageSmoothingEnabled = false;
+const overlayCanvas = document.getElementById('OverlayCanvas');
+const overlayCtx = overlayCanvas.getContext('2d', { antialias: false });
+overlayCtx.imageSmoothingEnabled = false;
