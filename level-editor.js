@@ -74,7 +74,7 @@ function addStructure(asset, x, y) {
     for (let j = 0; j < asset.column; j++) {
       if (asset.items.length > index) {
         let item = asset.items[index];
-        map.structures[x + j][y + i] = item;
+        map.structures[x + j][y + i] = { ...item, key: getImgKey(item.img)};
       }
       index++;
     }
@@ -88,7 +88,7 @@ function addGround(asset, x, y) {
     for (let j = 0; j < asset.column; j++) {
       if (asset.items.length > index) {
         let item = asset.items[index];
-        map.board[x + j][y + i] = item;
+        map.board[x + j][y + i] = { ...item, key: getImgKey(item.img) };
       }
       index++;
     }
@@ -103,7 +103,7 @@ function drawBox() {
     const maxY = Math.max(pos.j, j);
     const minY = Math.min(pos.j, j);
     for (let x = minX; x <= maxX; x++) {
-      for (let y = minY; y <= maxY; y++) {
+      for (let y = minY; y <= maxY; y++) {        
         if (selection.type === 'structure') {
           addStructure(selection, x, y);
         } else if (selection.type === 'wall') {
@@ -114,6 +114,10 @@ function drawBox() {
           addGround(selection, x, y);
         } else if (selection.type === 'collection') {
           addStructure(selection, x, y);
+        } else if (selection.type === 'Clear ground') {
+          map.board[x][y] = undefined;
+        } else if (selection.type === 'Clear structure') {
+          map.structures[x][y] = undefined;
         }
       }
     }
@@ -154,6 +158,9 @@ document.addEventListener('keyup', (event) => {
   if (event.key === '4') {
     map.goToLocation(1, 18);
   }
+  if (event.key === '5') {
+    map.goToLocation(18, 18);
+  }
 });
 
 function tileSelection(tile) {
@@ -171,6 +178,26 @@ function tileSelection(tile) {
   selection = tile;
 
   name.innerText = tile.key;
+}
+
+function onClearGround() {
+  const brushes = document.getElementById('active-brush');
+  const name = document.getElementById('active-brush-name');
+  const element = document.createElement('div');
+  brushes.replaceChildren(element);
+  selection = { type: 'Clear ground' };
+
+  name.innerText = 'Clear ground';
+}
+
+function onClearStructure() {
+  const brushes = document.getElementById('active-brush');
+  const name = document.getElementById('active-brush-name');
+  const element = document.createElement('div');
+  brushes.replaceChildren(element);
+  selection = { type: 'Clear structure' };
+
+  name.innerText = 'Clear structure';
 }
 
 function groundSelection(ground) {
@@ -378,9 +405,10 @@ function onSave() {
       board: map.board,
       resources: map.resources,
       structures: map.structures,
-      monsters: map.monsters.map((m) => {
-        m.key, m.position;
-      }),
+      monsters: map.monsters.map(m => ({
+        type: m.type, 
+        position: m.position
+      })),
     },
   };
 

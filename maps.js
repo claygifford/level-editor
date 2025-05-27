@@ -40,7 +40,7 @@ function defaultMap() {
     structure.board[39][i] = {key: 'forest_71'};
   }
 
-  structure.monsters = [{ key: 'slimeball' }];
+  structure.monsters = [{ type: 'slimeball', position: {x: 2, y: 2} }];
 
   return {
     scale: 2.5,
@@ -49,20 +49,23 @@ function defaultMap() {
   };
 }
 
-function createTiles(screen, structure) {
+function createTiles(screen, values) {
   for (let i = 0; i < screen.length; i++) {
     for (let j = 0; j < screen.length; j++) {
       let square = screen[i][j];
-      structure[i][j] = tilesLookup[square.key];
+      if (square && square.key)
+        values[i][j] = tilesLookup[square.key];
     }
   }
-  return structure;
+  return values;
 }
 
 function createMonsters(set, monsters) {
   for (let i = 0; i < set.length; i++) {    
     let monster = set[i];
-    monsters.push(monstersLookup[monster.key]);
+    let copy = monstersLookup[monster.type];
+    copy.position = monster.position;
+    monsters.push(copy);
   }
   return monsters;
 }
@@ -71,12 +74,12 @@ function setMap(config) {
   const { structure, scale, characterPosition } = config;
 
   const empty = getEmptyValues(40);
-  const { board, monsters } = structure;
+  const { board, resources,  monsters, structures } = structure;
 
   map.board = createTiles(board, empty.board);
   map.boardAnimations = empty.boardAnimations;
-  map.resources = empty.resources;
-  map.structures = empty.structures;
+  map.resources = createTiles(resources, empty.resources);
+  map.structures = createTiles(structures, empty.structures);
   map.monsters = createMonsters(monsters, empty.monsters);
 
   character.position = characterPosition;

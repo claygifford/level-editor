@@ -1,7 +1,7 @@
-const loadImage = (src, category, group) => {
+const loadImage = (src) => {
   return new Promise((resolve, reject) => {
     let img = new Image();
-    img.onload = () => resolve({ img, group, category });
+    img.onload = () => resolve({ img });
     img.onerror = reject;
     img.src = src;
   });
@@ -356,9 +356,11 @@ async function createImages() {
     ...fencesAndWalls,
     ...collections,
   ].reduce(function (r, e) {
+
     for (let i = 0; i < e.items.length; i++) {
       let child = e.items[i];
-      r[e.key] = { key: getImgKey(child.img), img: child.img };
+      let key = getImgKey(child.img);
+      r[key] = { key: key, img: child.img };
     }
     return r;
   }, {});

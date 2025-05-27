@@ -61,6 +61,11 @@ img {
     display: flex;
     flex-direction: column;
 }
+.game-brushes-cleanup {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
 .game-brushes-general {
     display: grid;
     grid-template-columns: repeat(16, 16px);
