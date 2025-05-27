@@ -3,7 +3,7 @@ canvas {
     position: absolute;
 }
 .clean-canvas {
-    /* image-rendering: pixelated; */
+    image-rendering: pixelated;
 }
 img {
     /* image-rendering: pixelated; */
@@ -13,6 +13,15 @@ img {
     font-family: StardewValley;
     src: url(./fonts/StardewValley.ttf);
   }
+
+.game-window {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
 
 .game-area {
     position: relative;

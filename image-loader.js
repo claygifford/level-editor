@@ -153,23 +153,6 @@ async function loadForestTiles(values) {
   values.push(ground(createBlocks(items, 1, 1, 159, 0), 1, 1));
 
   values.push(ground(createBlocks(items, 2, 4, 72, -54), 2, 4));
-  
-  // for (let i = 0; i < 110; i++) {
-  //   tiles.push(tile(items.splice(0, 1)));
-  // }
-  // tiles.push(tile(items.splice(0, 1)));
-
-  // tiles.push(...getForestGroups(5, items));
-
-  // items.splice(0, 1);
-  // items.splice(0, 1);
-
-  // tiles.push(...getForestGroups(5, items));
-
-  // items.splice(0, 1);
-  // items.splice(0, 1);
-
-  // tiles.push(...getForestGroups(5, items));
 }
 
 async function loadForestPaths(values, path) {

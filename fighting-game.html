@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="styles.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Topdown Fighting Game</title>    
+    <title>Topdown Fighting Game</title>
     <script src="loop.js"></script>
     <script src="game.js"></script>
     <script src="maps.js"></script>
@@ -13,16 +13,37 @@
   </head>
 
   <body>
-    <div class="game-container">
-      <div class="game-section">
-        <div class="game-area">
-          <canvas id="GameCanvas" width="640" height="640" class="clean-canvas"></canvas>
-          <canvas id="StructuresCanvas" width="640" height="640" class="clean-canvas"></canvas> 
-          <canvas id="CharacterCanvas" width="640" height="640" class="clean-canvas"></canvas>          
-          <canvas id="ResourcesCanvas" width="640" height="640" class="clean-canvas"></canvas>          
-          <canvas id="OverlayCanvas" width="640" height="640" class="dirty-canvas"></canvas>
-        </div>
-      </div>
+    <div class="game-window">
+      <canvas
+        id="GameCanvas"
+        width="640"
+        height="640"
+        class="clean-canvas"
+      ></canvas>
+      <canvas
+        id="StructuresCanvas"
+        width="640"
+        height="640"
+        class="clean-canvas"
+      ></canvas>
+      <canvas
+        id="CharacterCanvas"
+        width="640"
+        height="640"
+        class="clean-canvas"
+      ></canvas>
+      <canvas
+        id="ResourcesCanvas"
+        width="640"
+        height="640"
+        class="clean-canvas"
+      ></canvas>
+      <canvas
+        id="OverlayCanvas"
+        width="640"
+        height="640"
+        class="dirty-canvas"
+      ></canvas>
     </div>
     <script src="context.js"></script>
     <script src="fighting-game.js"></script>
