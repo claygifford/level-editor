@@ -5,7 +5,7 @@ var paths = [];
 var assets = [];
 var collections = [];
 var fencesAndWalls = [];
-
+var coolFont = [];
 function getImgKey(img) {
   const fullPath = img.src;
   filename = fullPath.substring(fullPath.lastIndexOf('/') + 1);

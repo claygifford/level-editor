@@ -23,6 +23,16 @@ document.addEventListener('keydown', (event) => {
 
 document.addEventListener('keyup', (event) => {
   delete keys[event.key];
+
+  if (showingStartScreen) {
+    showingStartScreen = false;
+    map.showCoolFont = false;
+    map.showToolbar = true;
+    map.clearOverlay();
+    setMap(map1);
+    draw();
+  }
+
   if (event.key === '1') {
     character.rightHand = character.rightHand
       ? undefined
@@ -33,12 +43,36 @@ document.addEventListener('keyup', (event) => {
       ? undefined
       : weaponsLookup['shield'];
   }
+  if (event.key === 'Escape') {
+    map.clearOverlay();
+    setMap(startMenu);
+    draw();
+  }
+
+  // SECRET BONUS EASTER EGG
+  // press m to go to the secret map
+  if (event.key === 'm') {
+    map.clearOverlay();
+    setMap(map2);
+    draw();
+  }
+});
+
+document.addEventListener('wheel', (event) => {
+  if (event.deltaY < 0) {
+    map.zoomIn();
+  } else {
+    map.zoomOut();
+  }
+  map.setScale();
+  map.clearOverlay();
+  draw();
 });
 
 function setBoxSize() {
   let box = Math.min(window.innerWidth, window.innerHeight);
   //box = box < 640 ? 640 : box;
-  box = 1280;
+  box = 640;
   gameCanvas.height = box;
   gameCanvas.width = box;
   gameCtx.imageSmoothingEnabled = false;
@@ -61,14 +95,15 @@ window.addEventListener('resize', function (event) {
   setBoxSize();
 });
 
+var showingStartScreen = true;
 async function begin() {
   setBoxSize();
-  
+
   then = window.performance.now();
   await createImages();
 
-  setMap(defaultMap());  
-  
+  setMap(startMenu);
+
   draw();
   animate();
 }

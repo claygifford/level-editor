@@ -9,6 +9,9 @@ var weaponsLookup = {
 };
 
 var map = {
+  last_spawn: 0,
+  showCoolFont: true,
+  showToolbar: false,
   monsters: [],
   camera: { x: 0, y: 0 },
   window: { x: 0, y: 0, width: 0, height: 0 },
@@ -123,6 +126,7 @@ var map = {
   drawMonsters: function () {
     for (let i = 0; i < this.monsters.length; i++) {
       let monster = this.monsters[i];
+
       let img = monster.getImage();
       this.drawCharacter(
         characterCtx,
@@ -131,6 +135,89 @@ var map = {
         monster.position.y,
         monster.size
       );
+    }
+  },
+  moveObject: function (object, targetX, targetY, speed) {
+    let dx = targetX - object.position.x;
+    let dy = targetY - object.position.y;
+    object.position.x += dx * speed;
+    object.position.y += dy * speed;
+  },
+  drawAndMoveMonsters: function () {
+    for (let i = 0; i < this.monsters.length; i++) {
+      let monster = this.monsters[i];
+      if (!this.showCoolFont) {
+        this.moveObject(
+          monster,
+          character.position.x,
+          character.position.y,
+          0.001
+        );
+      }
+      let img = monster.getImage();
+      this.drawCharacter(
+        characterCtx,
+        img,
+        monster.position.x,
+        monster.position.y,
+        monster.size
+      );
+    }
+  },
+  drawFonts: function () {
+    if (this.showCoolFont) {
+      overlayCtx.drawImage(coolFont[0].img, 50, 30, 200, 30);
+    }
+
+    if (this.fonts && this.fonts.length > 0) {
+      overlayCtx.font = '14px StardewValley';
+      overlayCtx.shadowColor = '#3131318c';
+      overlayCtx.shadowBlur = 4;
+      overlayCtx.fillStyle = 'white';
+      overlayCtx.strokeStyle = 'black';
+      overlayCtx.lineWidth = 1;
+      overlayCtx.shadowBlur = 0;
+      for (let i = 0; i < this.fonts.length; i++) {
+        let font = this.fonts[i];
+        overlayCtx.strokeText(font.text, font.pos.x, font.pos.y);
+        overlayCtx.fillText(font.text, font.pos.x, font.pos.y);
+      }
+    }
+  },
+  drawHealth: function () {
+    if (this.showToolbar) {
+      overlayCtx.fillStyle = 'white';
+      overlayCtx.font = '8px StardewValley';
+      overlayCtx.fillText('Health', 9, 7);
+      overlayCtx.beginPath();
+      overlayCtx.rect(9, 9, 102, 10);
+      overlayCtx.fill();
+      overlayCtx.closePath();
+
+      overlayCtx.beginPath();
+      overlayCtx.rect(10, 10, character.health, 8);
+      overlayCtx.fillStyle = 'red';
+      overlayCtx.fill();
+      overlayCtx.closePath();
+    }
+  },
+  drawScore: function () {
+    if (this.showToolbar) {
+      overlayCtx.font = '18px StardewValley';
+      overlayCtx.fillStyle = 'white';
+      overlayCtx.fillText(`Score: ${character.score}`, 250, 20);
+    }
+  },
+  drawTime: function () {
+    if (this.showToolbar) {
+      let diff = Math.floor((Date.now() - this.time) / 1000);
+      if (this.last_spawn + diff > 15) {
+        this.last_spawn += diff;
+      }
+      //spawn in a new monster
+      overlayCtx.font = '18px StardewValley';
+      overlayCtx.fillStyle = 'white';
+      overlayCtx.fillText(`Time: ${diff}`, 150, 20);
     }
   },
   draw: function (ctx, panel, boxLength, boxHeight) {
@@ -154,40 +241,38 @@ var map = {
   drawHero: function () {
     const { x, y } = character.position;
     if (Object.keys(keys).length > 0) {
+      let acceleration = keys['z'] ? 0.25 : 1 / elapsed;
       if (keys['s']) {
-        const pos = character.position.y + 1 / elapsed;
+        const pos = character.position.y + acceleration;
         if (pos < 38) {
           character.position.y = pos;
-          character.animation = walkAnimation;
+          character.animation = keys['z'] ? jumpAnimation : walkAnimation;
         }
       }
       if (keys['a']) {
-        const pos = character.position.x - 1 / elapsed;
+        const pos = character.position.x - acceleration;
         if (pos > 0) {
           character.direction = 'left';
           character.position.x = pos;
-          character.animation = walkAnimation;
+          character.animation = keys['z'] ? jumpAnimation : walkAnimation;
         }
       }
       if (keys['w']) {
-        const pos = character.position.y - 1 / elapsed;
+        const pos = character.position.y - acceleration;
         if (pos > 0) {
           character.position.y = pos;
-          character.animation = walkAnimation;
+          character.animation = keys['z'] ? jumpAnimation : walkAnimation;
         }
       }
       if (keys['d']) {
-        const pos = character.position.x + 1 / elapsed;
+        const pos = character.position.x + acceleration;
         if (pos < 38) {
           character.position.x = pos;
           character.direction = 'right';
-          character.animation = walkAnimation;
+          character.animation = keys['z'] ? jumpAnimation : walkAnimation;
         }
       }
 
-      if (keys['z']) {
-        character.animation = jumpAnimation;
-      }
       if (keys['x']) {
         character.animation = turnAnimation;
       }
@@ -216,6 +301,24 @@ var map = {
       this.setTransforms();
     }
 
+    if (character.isDead === false) {
+      let posX = Math.floor(character.position.x);
+      let posY = Math.floor(character.position.y);
+      for (let i = 0; i < this.monsters.length; i++) {
+        let monster = this.monsters[i];
+        let monX = Math.floor(monster.position.x);
+        let monY = Math.floor(monster.position.y);
+        if (posX === monX && posY === monY) {
+          character.animation = hurtAnimation;
+          character.health -= 5;
+          if (character.health < 0) {
+            character.animation = deathAnimation;
+            character.isDead = true;
+          }
+        }
+      }
+    }
+
     this.clearWindow(characterCtx);
     let img = character.getImage();
     this.drawCharacter(
@@ -232,7 +335,7 @@ var map = {
         hand,
         character.position.x,
         character.position.y,
-        character.size/1.5,
+        character.size / 1.5,
         32,
         36
       );
@@ -244,11 +347,14 @@ var map = {
         hand,
         character.position.x,
         character.position.y,
-        character.size/1.5,
+        character.size / 1.5,
         0,
         30
       );
     }
+  },
+  clearOverlay: function () {
+    overlayCtx.clearRect(0, 0, 640, 640);
   },
   clearWindow: function (ctx) {
     ctx.clearRect(
@@ -297,13 +403,20 @@ var map = {
     this.drawGame();
     this.drawResources();
     this.drawStructures();
+    this.drawFonts();
+    this.drawHealth();
+    this.drawScore();
+    this.drawTime();
   },
 };
 
 var character = {
+  isDead: false,
   animation: undefined,
   direction: 'right',
   ticks: 0,
+  health: 100,
+  score: 0,
   position: { x: 0, y: 0 },
   size: 32,
   getImage: function () {
@@ -313,6 +426,13 @@ var character = {
       if (img) return img;
       this.animation = undefined;
       this.ticks = 0;
+    }
+    if (this.isDead) {
+      let death =
+        character.direction === 'left'
+          ? character.death.slice(7, 8)
+          : character.death.slice(3, 4);
+      return death[0].img;
     }
     let idle =
       character.direction === 'left'
@@ -371,6 +491,43 @@ function shield(type, idle, bash, hit) {
 }
 
 function slimeball(type, wake, idle, walk, jump, turn, death) {
+  return {
+    type,
+    animation: undefined,
+    position: { x: 10, y: 10 },
+    direction: 'right',
+    ticks: 0,
+    size: 24,
+    idle,
+    wake,
+    idle,
+    walk,
+    jump,
+    turn,
+    death,
+    getImage: function () {
+      this.ticks++;
+      if (this.animation) {
+        let img = this.animation(this);
+        if (img) return img;
+        this.animation = undefined;
+        this.ticks = 0;
+      }
+      let idle =
+        this.direction === 'right'
+          ? this.idle.slice(0, 4)
+          : this.idle.slice(4, 8);
+      if (this.ticks < 10) return idle[0].img;
+      if (this.ticks < 20) return idle[1].img;
+      if (this.ticks < 30) return idle[2].img;
+      if (this.ticks < 40) return idle[3].img;
+      this.ticks = 0;
+      return idle[0].img;
+    },
+  };
+}
+
+function demon(type, wake, idle, walk, jump, turn, death) {
   return {
     type,
     animation: undefined,

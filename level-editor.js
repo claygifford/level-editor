@@ -53,7 +53,6 @@ function drawMousePosition() {
   overlayCtx.stroke();
   overlayCtx.closePath();
 
-  //if draw font
   if (drawFont) {
     overlayCtx.font = '36px StardewValley';
     overlayCtx.shadowColor = '#3131318c';
@@ -74,7 +73,7 @@ function addStructure(asset, x, y) {
     for (let j = 0; j < asset.column; j++) {
       if (asset.items.length > index) {
         let item = asset.items[index];
-        map.structures[x + j][y + i] = { ...item, key: getImgKey(item.img)};
+        map.structures[x + j][y + i] = { ...item, key: getImgKey(item.img) };
       }
       index++;
     }
@@ -103,7 +102,7 @@ function drawBox() {
     const maxY = Math.max(pos.j, j);
     const minY = Math.min(pos.j, j);
     for (let x = minX; x <= maxX; x++) {
-      for (let y = minY; y <= maxY; y++) {        
+      for (let y = minY; y <= maxY; y++) {
         if (selection.type === 'structure') {
           addStructure(selection, x, y);
         } else if (selection.type === 'wall') {
@@ -353,8 +352,8 @@ async function begin() {
     addStructureToScreen(collectionsDiv, collection);
   }
 
-  setMap(defaultMap());
-
+  //setMap(defaultMap());
+  setMap(map2);
   map.setScale();
 
   draw();
@@ -405,9 +404,9 @@ function onSave() {
       board: map.board,
       resources: map.resources,
       structures: map.structures,
-      monsters: map.monsters.map(m => ({
-        type: m.type, 
-        position: m.position
+      monsters: map.monsters.map((m) => ({
+        type: m.type,
+        position: m.position,
       })),
     },
   };
@@ -448,6 +447,16 @@ function onRemoveFont() {
 function onLoadMap1() {
   setMap(map1);
 }
+function onLoadMap2() {
+  setMap(map2);
+}
+function onLoadStartMenu() {
+  setMap(startMenu);
+}
+function onLoadInstructions() {
+  setOverlay(instructions);
+}
+
 function onEquip(hand, item) {
   character[hand] = weaponsLookup[item];
 }

@@ -14,10 +14,15 @@ function animate() {
   if (elapsed > fpsInterval) {
     then = now - (elapsed % fpsInterval);
     map.drawHero();
-    map.drawMonsters();
+    map.drawAndMoveMonsters();
     map.drawGame();
     map.drawResources();
     map.drawStructures();
+    map.clearOverlay();
+    map.drawFonts();
+    map.drawHealth();
+    map.drawScore();
+    map.drawTime();
     map.drawBoardAnimations();
   }
 }

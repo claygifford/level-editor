@@ -77,18 +77,45 @@ async function getMonsters() {
   let wake = items.splice(0, 8);
   idle = items.splice(0, 8);
   let walk = items.splice(0, 8);
-  let jump = items.splice(0,8);
-  let turn = items.splice(0,8);
-  let death  = items.splice(0,8);
+  let jump = items.splice(0, 8);
+  let turn = items.splice(0, 8);
+  let death = items.splice(0, 8);
 
-  monstersLookup.slimeball = slimeball('slimeball', wake, idle, walk, jump, turn, death);
+  monstersLookup.slimeball = slimeball(
+    'slimeball',
+    wake,
+    idle,
+    walk,
+    jump,
+    turn,
+    death
+  );
+
+  for (let i = 0; i < 47; i++) {
+    let imageUrl = `characters/demon/demon_${i}.png`;
+    monsterRequests.push(loadImage(imageUrl));
+    monsterImageUrls.push(imageUrl);
+  }
+
+  items = await Promise.all(monsterRequests);
+  monsterRequests = [];
+  monsterImageUrls = [];
+
+  wake = items.splice(0, 8);
+  idle = items.splice(0, 8);
+  walk = items.splice(0, 8);
+  jump = items.splice(0, 8);
+  turn = items.splice(0, 8);
+  death = items.splice(0, 8);
+
+  monstersLookup.demon = demon('demon', wake, idle, walk, jump, turn, death);
 }
 
 function getForestGroups(count, items) {
   let result = [];
   let groups = Array.from(Array(count), () => new Array(0));
-  for (let i = 0; i <= count-1; i++) {
-    for (let j=0; j<=count-1; j++) {
+  for (let i = 0; i <= count - 1; i++) {
+    for (let j = 0; j <= count - 1; j++) {
       groups[j].push(items.splice(0, 1)[0]);
     }
   }
@@ -118,7 +145,7 @@ async function loadForestTiles(values) {
 
   items = await Promise.all(requests);
 
-  for (let i = 23; i < 100; i++) {    
+  for (let i = 23; i < 100; i++) {
     if (i >= 34 && i <= 37) continue;
     if (i >= 43 && i <= 44) continue;
     if (i >= 56 && i <= 59) continue;
@@ -158,14 +185,14 @@ async function loadForestTiles(values) {
 async function loadForestPaths(values, path) {
   let items;
   let imageUrls = [];
-  let requests = [];   
+  let requests = [];
 
   for (let i = 0; i < 39; i++) {
     let imageUrl = getPath(path, i);
     requests.push(loadImage(imageUrl));
     imageUrls.push(imageUrl);
   }
-  
+
   items = await Promise.all(requests);
 
   for (let i = 8; i < 31; i++) {
@@ -177,7 +204,7 @@ async function loadForestPaths(values, path) {
 async function loadForestFencesAndWalls() {
   let imageUrls = [];
   let requests = [];
-  
+
   for (let i = 0; i < 179; i++) {
     let imageUrl = `resources/forest/forest_fences_and_walls_${i}.png`;
     requests.push(loadImage(imageUrl));
@@ -235,7 +262,7 @@ async function loadForestCollections() {
   collections.push(collection(createBlocks(items, 1, 1, 32, 0), 1, 1));
   collections.push(collection(createBlocks(items, 1, 1, 33, 0), 1, 1));
   collections.push(collection(createBlocks(items, 1, 1, 34, 0), 1, 1));
-  collections.push(collection(createBlocks(items, 1, 1, 37, 0), 1, 1));  
+  collections.push(collection(createBlocks(items, 1, 1, 37, 0), 1, 1));
   collections.push(collection(createBlocks(items, 2, 2, 38, -28), 2, 2));
   collections.push(collection(createBlocks(items, 1, 1, 40, 0), 1, 1));
   collections.push(collection(createBlocks(items, 1, 1, 41, 0), 1, 1));
@@ -270,7 +297,6 @@ async function loadForestCollections() {
   collections.push(collection(createBlocks(items, 2, 1, 87, -76), 2, 1));
   collections.push(collection(createBlocks(items, 2, 1, 88, -77), 2, 1));
 
-
   collections.push(collection(createBlocks(items, 2, 1, 90, -79), 2, 1));
   collections.push(collection(createBlocks(items, 2, 1, 91, -80), 2, 1));
 }
@@ -287,23 +313,30 @@ function createBlocks(items, row, column, leftOffset, rightOffset) {
 
   let index = 0 + leftOffset;
   let set = [];
-  for (let i=0; i<row; i++) {
-    for (let j=0; j<column; j++) {      
+  for (let i = 0; i < row; i++) {
+    for (let j = 0; j < column; j++) {
       set.push(o[index]);
       index++;
     }
-    
+
     index += leftOffset + rightOffset;
   }
   return set;
 }
 
-async function loadForestAsset(tileCount, row, column, leftOffset, rightOffset, path) {
+async function loadForestAsset(
+  tileCount,
+  row,
+  column,
+  leftOffset,
+  rightOffset,
+  path
+) {
   let imageUrls = [];
   let requests = [];
   let items;
 
-  for (let i = 0; i < tileCount; i++) {    
+  for (let i = 0; i < tileCount; i++) {
     let imageUrl = getPath(path, i);
     requests.push(loadImage(imageUrl));
     imageUrls.push(imageUrl);
@@ -319,11 +352,33 @@ async function loadForestAsset(tileCount, row, column, leftOffset, rightOffset, 
     )
   );
 }
-
+async function getCoolFont() {
+  let requests = [];
+  let imageUrls = [];
+  let imageUrl = `cool font/fontbolt.png`;
+  requests.push(loadImage(imageUrl));
+  imageUrls.push(imageUrl);
+  items = await Promise.all(requests);
+  coolFont = items;
+}
 async function createImages() {
   await loadForestTiles(floors);
-  await loadForestAsset(71, 5, 11, 1, 0, 'pallette/forest/forest_bridge_horizontal_');
-  await loadForestAsset(49, 9, 3, 1, 1, 'pallette/forest/forest_bridge_vertical_');
+  await loadForestAsset(
+    71,
+    5,
+    11,
+    1,
+    0,
+    'pallette/forest/forest_bridge_horizontal_'
+  );
+  await loadForestAsset(
+    49,
+    9,
+    3,
+    1,
+    1,
+    'pallette/forest/forest_bridge_vertical_'
+  );
   await loadForestAsset(107, 5, 4, 1, 13, 'pallette/forest/forest_fountain_');
   await loadForestPaths(paths, 'pallette/forest/forest_path_');
 
@@ -331,7 +386,7 @@ async function createImages() {
   await loadForestCollections();
 
   await getMonsters();
-  
+  await getCoolFont();
   tilesLookup = [
     ...floors,
     ...paths,
@@ -339,7 +394,6 @@ async function createImages() {
     ...fencesAndWalls,
     ...collections,
   ].reduce(function (r, e) {
-
     for (let i = 0; i < e.items.length; i++) {
       let child = e.items[i];
       let key = getImgKey(child.img);

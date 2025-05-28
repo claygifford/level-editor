@@ -4,11 +4,13 @@
     <link rel="stylesheet" href="styles.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Topdown Fighting Game</title>
+    <title>Level Editor</title>
     <script src="loop.js"></script>
     <script src="game.js"></script>
     <script src="maps.js"></script>
+    <script src="maps/startMenu.js"></script>
     <script src="maps/map1.js"></script>
+    <script src="maps/map2.js"></script>
     <script src="resources.js"></script>
     <script src="image-loader.js"></script>
   </head>
@@ -62,7 +64,10 @@
         <div class="game-information-section">
           <div>Maps</div>
           <div>
+            <button onclick="onLoadStartMenu()">Start menu</button>
+            <button onclick="onLoadInstructions()">Instructions</button>
             <button onclick="onLoadMap1()">Map1</button>
+            <button onclick="onLoadMap2()">Map2</button>
           </div>
         </div>
         <div class="game-information-section">
@@ -124,9 +129,11 @@
         <div id="brushes" class="game-brushes">
           <div>Cleanup</div>
           <div class="game-brushes-cleanup">
-            <div>Clear Ground</div><button onclick="onClearGround()">🧹</button>
-            <div>Clear Structure</div><button onclick="onClearStructure()">🧹</button>
-          </div>          
+            <div>Clear Ground</div>
+            <button onclick="onClearGround()">🧹</button>
+            <div>Clear Structure</div>
+            <button onclick="onClearStructure()">🧹</button>
+          </div>
           <div>General</div>
           <div id="general" class="game-brushes-general"></div>
           <div>Path</div>
